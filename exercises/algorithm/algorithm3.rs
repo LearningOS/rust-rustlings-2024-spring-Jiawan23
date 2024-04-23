@@ -3,10 +3,17 @@
 	This problem requires you to implement a sorting algorithm
 	you can use bubble sorting, insertion sorting, heap sorting, etc.
 */
-// I AM NOT DONE
 
-fn sort<T>(array: &mut [T]){
+fn sort<T:PartialOrd>(array: &mut [T]){
 	//TODO
+  let len = array.len();
+  for i in 0..len{
+    for j in 1..(len-i){
+      if array[j-1] > array[j]{
+        array.swap(j,j-1);
+      }
+    }
+  }
 }
 #[cfg(test)]
 mod tests {

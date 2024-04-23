@@ -5,9 +5,9 @@
 // Execute `rustlings hint macros3` or use the `hint` watch subcommand for a
 // hint.
 
-// I AM NOT DONE
 
 mod macros {
+    #[macro_export] //表明只要导入了定义这个宏的 crate，该宏就应该是可用的
     macro_rules! my_macro {
         () => {
             println!("Check out my macro!");
