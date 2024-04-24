@@ -1,8 +1,7 @@
 /*
-	heap
-	This question requires you to implement a binary heap function
+    heap
+    This question requires you to implement a binary heap function
 */
-// I AM NOT DONE
 
 use std::cmp::Ord;
 use std::default::Default;
@@ -23,7 +22,7 @@ where
     pub fn new(comparator: fn(&T, &T) -> bool) -> Self {
         Self {
             count: 0,
-            items: vec![T::default()],
+            items: vec![T::default()], //此处是有一个default值，vec非空，根节点应该从1开始
             comparator,
         }
     }
@@ -38,6 +37,13 @@ where
 
     pub fn add(&mut self, value: T) {
         //TODO
+        self.items.push(value);
+        self.count += 1;
+        let mut idx = self.count;
+        while idx > 1 && (self.comparator)(&self.items[idx], &self.items[idx / 2]) {
+            self.items.swap(idx, idx / 2);
+            idx /= 2;
+        }
     }
 
     fn parent_idx(&self, idx: usize) -> usize {
@@ -58,7 +64,17 @@ where
 
     fn smallest_child_idx(&self, idx: usize) -> usize {
         //TODO
-		0
+        let left_child = self.left_child_idx(idx);
+        let right_child = self.right_child_idx(idx);
+
+        if right_child <= self.count
+            && left_child <= self.count
+            && (self.comparator)(&self.items[right_child], &self.items[left_child])
+        {
+            right_child
+        } else {
+            left_child
+        }
     }
 }
 
@@ -85,7 +101,24 @@ where
 
     fn next(&mut self) -> Option<T> {
         //TODO
-		None
+        if self.is_empty() {
+            return None;
+        }
+
+        let root = self.items.swap_remove(1);
+        self.count -= 1;
+        let mut idx = 1;
+        loop {
+            let smallest_child_idx = self.smallest_child_idx(idx);
+            if smallest_child_idx > self.count
+                || (self.comparator)(&self.items[idx], &self.items[smallest_child_idx])
+            {
+                break;
+            }
+            self.items.swap(idx, smallest_child_idx);
+            idx = smallest_child_idx;
+        }
+        Some(root)
     }
 }
 
